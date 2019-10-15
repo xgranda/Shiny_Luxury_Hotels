@@ -6,10 +6,11 @@ shinyUI(dashboardPage(
       sidebarMenu(
         menuItem(text = "Home", tabName = "Home",icon = icon("home")),
         menuItem(text = "Countries", tabName = "Countries",icon = icon("globe")), 
-        menuItem(text = "Hotels", tabName = "Hotels",icon = icon("concierge-bell")),
-        menuItem(text = "Reviewers", tabName = "Reviewers",icon = icon("users")), 
         menuItem(text = "Type of Trip", tabName = "Trip",icon = icon("suitcase-rolling")),
         menuItem(text = "Type of Traveller", tabName = "Traveller",icon = icon("smile")),
+        menuItem(text = "Reviews Over Time", tabName = "Time",icon = icon("calendar-alt")),
+        menuItem(text = "Hotels", tabName = "Hotels",icon = icon("concierge-bell")),
+        menuItem(text = "Reviewers", tabName = "Reviewers",icon = icon("users")), 
         menuItem(text = "About Me", tabName = "About Me",icon = icon("user"))
       )
     ),
@@ -37,8 +38,40 @@ shinyUI(dashboardPage(
                 h2("Location of Hotels", align="center"),
                 leafletOutput("map_1")
                 ),
+        tabItem(tabName = "Trip", 
+                box(selectizeInput("s_type_trip", 
+                               "Select Type of Trip", 
+                               trip_list), width = 12),
+                box(htmlOutput("pie_trip"),width = 12),
+                box(htmlOutput("bar_night"), width = 12)
+                ),
+        tabItem(tabName = "Traveller",
+                fluidRow(box(selectizeInput("t_trip", 
+                                   "Select Type of Trip", 
+                                   trip_list), width = 6),
+                box(selectizeInput("n_trip",
+                                   "Select Traveller Type",
+                                   traveller), width = 6)),
+                box(htmlOutput("traveller_1"), width = 12),
+                box(htmlOutput("night_1"), width = 12)
+                ),
+        tabItem(tabName = "Time",
+                fluidRow(box(selectizeInput("time_trip", 
+                                            "Select Type of Trip", 
+                                            trip_list), width = 6),
+                         box(selectizeInput("time_trip_2", 
+                                            "Select Year", 
+                                            years), width = 6)
+                         ),
+                box(htmlOutput("time_1"), width = 12),
+                box(htmlOutput("time_2"), width = 12)
+                ),
         tabItem(tabName = "Hotels", 
-                fluidRow(valueBoxOutput("max_Hotel_Box", width = 12))
+                box(selectizeInput("h_trip", 
+                                   "Select Type of Trip", 
+                                   trip_list), width = 12),
+                box(htmlOutput("hotel_trip"),width=12),
+                leafletOutput("map_3", height = 350)
                 ),
         tabItem(tabName = "Reviewers",
                 selectizeInput("Selected", 
@@ -47,21 +80,6 @@ shinyUI(dashboardPage(
                 fluidRow(valueBoxOutput("max_Reviewer_Box", width = 6),
                          valueBoxOutput("avg_num_night", width = 6)),
                          leafletOutput("map_2", height = 350)
-                ),
-        tabItem(tabName = "Trip", 
-                box(selectizeInput("s_type_trip", 
-                               "Select Type of Trip", 
-                               trip_list), width = 12),
-                fluidRow(box(htmlOutput("hotel_score"),width = 6),
-                         box(htmlOutput("pie_trip"),width = 6)
-                         ),
-                box(htmlOutput("bar_night"), width = 12)
-                ),
-        tabItem(tabName = "Traveller",
-                box(selectizeInput("t_trip", 
-                                   "Select Type of Trip", 
-                                   t_list), width = 12),
-                box(htmlOutput("traveller_1"), width = 12)
                 ),
         tabItem(tabName = "About Me", "About me information here")
       ),
